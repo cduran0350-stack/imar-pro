@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const resTabanAlani = document.getElementById('res-taban-alani');
     const resToplamAlan = document.getElementById('res-toplam-alan');
 
-    calculateBtn.addEventListener('click', performCalculation);
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        performCalculation();
+    });
 
     function performCalculation() {
         // Collect Inputs
