@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Display basic results
-        animateValue(resTabanAlani, 0, tabanAlani, 1000);
-        animateValue(resToplamAlan, 0, toplamInsaatAlani, 1000);
+        if (resTabanAlani) animateValue(resTabanAlani, 0, tabanAlani, 1000);
+        if (resToplamAlan) animateValue(resToplamAlan, 0, toplamInsaatAlani, 1000);
 
         // Generate Detailed Report
         generateReport(parselAlani, taks, kaks, katAdedi, tabanAlani, toplamInsaatAlani, katAlani, ekBilgiler, hedefDaire);
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${warningText}
 
                 <div class="report-section">
-                    <h3><i class="fas fa-ruler-combined"></i> Temal Yapı Parametreleri</h3>
+                    <h3><i class="fas fa-ruler-combined"></i> Temel Yapı Parametreleri</h3>
                     <div class="report-item">
                         <span>Maksimum Taban Alanı:</span>
                         <span>${formatNumber(ta)} m²</span>
@@ -195,8 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Save functionality
     document.getElementById('btn-save-report').addEventListener('click', () => {
-        const content = analysisContent.innerHTML;
-        if (content.includes('empty-state')) {
+        const hasReport = analysisContent.querySelector('.analysis-content-inner');
+        if (!hasReport) {
             alert('Önce bir hesaplama yapmalısınız.');
             return;
         }
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const reports = JSON.parse(localStorage.getItem('imar_pro_reports') || '[]');
         reports.push({
             date: new Date().toISOString(),
-            content: content,
+            content: analysisContent.innerHTML,
             parsel: document.getElementById('parsel-alani').value
         });
         localStorage.setItem('imar_pro_reports', JSON.stringify(reports));
@@ -216,11 +216,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnDownloadPdf = document.getElementById('btn-download-pdf');
     if (btnDownloadPdf) {
         btnDownloadPdf.addEventListener('click', () => {
-            const content = analysisContent.innerHTML;
-            if (content.includes('empty-state')) {
-                alert('PDF indirmek için önce bir hesaplama yapmalısınız.');
-                return;
-            }
+        const content = analysisContent.innerHTML;
+        const hasReport = analysisContent.querySelector('.analysis-content-inner');
+        if (!hasReport) {
+            alert('PDF indirmek için önce bir hesaplama yapmalısınız.');
+            return;
+        }
 
             const element = document.getElementById('analysis-content');
             const dateStr = new Date().toLocaleDateString('tr-TR').replace(/\./g, '-');
