@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = `
             <div class="analysis-content-inner active">
                 <div class="report-header">
-                    <span class="report-date">${date} - Teknik Analiz Özeti</span>
+                    <span class="report-date">Profesyonel İmar Analizi - ${date}</span>
                 </div>
 
                 ${warningText}
