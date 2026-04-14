@@ -1,4 +1,96 @@
+// =============================================
+// ANTALYA İLÇE VE MAHALLE VERİTABANI
+// =============================================
+const antalyaData = {
+    "Aksu": ["Altınova","Büyükçiftlik","Çiğli","Demirciler","Doğanköy","Düzlerçamı","Erenköy","Karaöz","Kavaklı","Kemerağzı","Kızıldağ","Kovanlık","Oyuklu","Perge","Pinarbasi","Sarısu","Seyrek","Yeşilbayır","Yeşilköy"],
+    "Alanya": ["Avsallar","Bektaş","Cikcilli","Demirtaş","Elikesik","Kargıcak","Kızılcaşehir","Mahmutlar","Muratpaşa","Oba","Okurcalar","Payallar","Seki","Tosmur","Türkler","Ümit","Yeşilöz","Hacet","Konaklı","Kestel"],
+    "Demre": ["Alakent","Belen","Beymelek","Çaykenarı","Gürses","Kapaklı","Karadere","Kınık","Kıyıköy","Myra","Sülüklü","Tepecik","Üçağız","Yeşilköy"],
+    "Döşemealtı": ["Akbaş","Altınkaya","Antalya","Aşağıkaraman","Atatürk","Balıkköy","Bucakşeyler","Çığlık","Doyran","İskender","Karabük","Kırkgöz","Kocaaliler","Kuruçay","Mimoza","Pirelli","Sağırin","Varsak","Yarbaşçandır"],
+    "Elmalı": ["Akçay","Akpınar","Ardıçkaya","Avlan","Bayındır","Beyköy","Bozyer","Çamköy","Çandır","Çukurköy","Dereköy","Doğanköy","Elmalı Merkez","Gavurağılı","Gödene","Gürlevik","Karabayır","Karadiken","Kızılbağ","Kıbrısçık","Kocapınar","Kozağaç","Kumluca","Ortaköy","Sarılar","Sofular","Tekke","Üzümlü","Yakaköy"],
+    "Finike": ["Alakır","Arif","Aşağıkuzdere","Beykonak","Çamalan","Çatallar","Çukurbağ","Göynük","Karaöz","Kumluca","Mavikent","Ortaköy","Sahilkent","Sahilköy","Turunçova","Ulupınar","Yalınca"],
+    "Gazipaşa": ["Ahırtaş","Akçalıman","Aladağ","Alanya","Başpınar","Bıçakçı","Boğazkent","Bostancı","Büklüce","Gözlek","Gündüz","Hacılar","Karadere","Karataş","Kızılot","Kumluk","Mecidiye","Narlıca","Ortaköy","Sarılar","Selimsek","Söğütlüdere","Torasan","Yenicekent","Ziyaretçiler"],
+    "Gündoğmuş": ["Akçay","Alanya","Alaçat","Bağlıca","Başlar","Boyalı","Bucaklar","Çamköy","Çandır","Değirmenözü","Demirli","Gökbük","Güzelbağ","Işıklar","Karaköy","Karataş","Kızılcaören","Kızılot","Koçak","Kumköy","Kumluk","Söğütlüdere","Tekeli","Yeşilyurt"],
+    "İbradı": ["Balcılar","Başpınar","Bozhüyük","Çamlık","Çukurca","Dağpazarı","Duraliler","Eskiköy","Gidengelmez","Gökbük","Güzelsu","Karacaören","Kızılcaören","Koçkaya","Sarıidris","Sorgun","Taşdibi","Topçam","Ürünlü"],
+    "Kaş": ["Akbel","Arsaköy","Bayındır","Bezirgan","Boğazcık","Boğazçay","Çukurbağ","Delikkemer","Gürsu","Hacıoglan","İslamlar","İskele","Kalkan","Karaçay","Karaköy","Kılınçlı","Kınık","Korsan","Kumluova","Limanağzı","Ova","Özlen","Pınarbaşı","Sarıbelen","Taşlık","Üzümlü","Yeşilköy"],
+    "Kemer": ["Beldibi","Beycik","Camyuva","Çamyuva","Çıralı","Göynük","Kemer Merkez","Kiriş","Kuzdere","Phaselis","Sarıgerme","Tekirova","Ulupınar","Yeniköy"],
+    "Kepez": ["Altınova","Arapsuyu","Bağlık","Camikebir","Çağlayan","Çakırlar","Değirmenönü","Dokuma","Doyran","Emek","Ermenek","Gebizli","Göksu","Güneş","Güzeloba","Haşimoğulları","Koyunlar","Kuzeykent","Memurevleri","Mollaalanı","Sütçüler","Şirinyalı","Uncalı","Yenimahalle","Zeytinköy"],
+    "Konyaaltı": ["Arapsuyu","Bahçelievler","Çakırlar","Çamlıbel","Doyran","Gürsu","Hurma","Liman","Sarısu","Uçansu","Uncalı","Yayla","Zeytinköy"],
+    "Korkuteli": ["Alacasu","Ardıçlı","Armutlu","Aşağıgökdere","Bayat","Belentepe","Bulkaz","Çamlık","Çavuş","Çığlık","Dağbeli","Dereköy","Doğancı","Eğridir","Erikli","Gebeceler","Gömbe","Gündoğan","Gürpınar","Horzum","Karaot","Kızılkaya","Kocabaş","Korkuteli Merkez","Kuyu","Sarılar","Sarıot","Sığırkuyruğu","Yeniköy"],
+    "Kumluca": ["Adrasan","Akçakaya","Aşağıovacık","Beykonak","Çamlıca","Çeltikçi","Çobanisa","Denizgiren","Dereköy","Elmalıyurt","Gebeceler","Gürlek","Hacıveliler","Karaöz","Kaşbelen","Kızılcadağ","Kocaalan","Kumluca Merkez","Mavikent","Sahilkent","Tahtalı","Tekirova","Yazır"],
+    "Manavgat": ["Atatürk","Avsallar","Çallı","Çenger","Çolaklı","Evrenseki","Gündoğdu","Güzelyalı","Hocalar","İlhan","Kalemler","Kumköy","Kuzca","Merkez","Oymapınar","Sarılar","Seferpaşa","Taşağıl","Titreyengöl","Ürünlü","Yakaköy","Yenimahalle"],
+    "Muratpaşa": ["Balbey","Barbaros","Çağlayan","Değirmen","Demircikara","Dumlupınar","Fener","Güllük","Haşimişcan","Hesapçı","Kışla","Kızılsaray","Koca Seyit","Kulekapı","Lara","Memurevleri","Meltem","Muratpaşa","Örnekköy","Selçuk","Sinan","Sultan Bulvarı","Şirinevler","Şirinyalı","Tahılpazarı","Topçular","Uncalı","Varsak","Yeşilbahçe","Zeytinlik"],
+    "Serik": ["Acıpayam","Akbaş","Akköy","Altınkum","Aşağıkaraman","Belek","Boğazkent","Bucak","Çayeli","Değirmenözü","Geyikbayırı","Kadriye","Karasaz","Kızılbük","Kumluk","Manavgat","Oymapınar","Sorgun","Taşağıl","Tepecik","Titreyengöl","Yukarıkaraman"],
+    "Akseki": ["Akpınar","Belkaya","Beykonak","Birler","Bulkaz","Çamlıca","Çataloluk","Çenger","Çevlik","Dereköy","Dikilitaş","Düzler","Eğridir","Gökbük","Gücük","Güneykaya","Gündoğan","İyidere","Karataş","Kızılcaören","Kocabaş","Meydan","Oyuklu","Sürtme","Tekeli","Yakaköy","Yeşilköy"]
+};
+
+function buildCustomSelect(triggerId, dropdownId, displayId, hiddenId, options, placeholder, onSelect) {
+    const trigger = document.getElementById(triggerId);
+    const dropdown = document.getElementById(dropdownId);
+    const display = document.getElementById(displayId);
+    const hidden = document.getElementById(hiddenId);
+
+    // Build options
+    dropdown.innerHTML = '';
+    options.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'custom-select-option';
+        div.textContent = opt;
+        div.addEventListener('click', () => {
+            hidden.value = opt;
+            display.textContent = opt;
+            display.style.color = 'var(--text-main)';
+            trigger.classList.remove('open');
+            dropdown.classList.remove('open');
+            dropdown.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+            div.classList.add('selected');
+            if (onSelect) onSelect(opt);
+        });
+        dropdown.appendChild(div);
+    });
+
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = trigger.classList.contains('open');
+        // Close all other dropdowns
+        document.querySelectorAll('.custom-select-trigger.open').forEach(t => {
+            t.classList.remove('open');
+            t.nextElementSibling && t.nextElementSibling.classList.remove('open');
+        });
+        document.querySelectorAll('.custom-select-dropdown.open').forEach(d => d.classList.remove('open'));
+        if (!isOpen) {
+            trigger.classList.add('open');
+            dropdown.classList.add('open');
+        }
+    });
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', () => {
+    document.querySelectorAll('.custom-select-trigger.open').forEach(t => t.classList.remove('open'));
+    document.querySelectorAll('.custom-select-dropdown.open').forEach(d => d.classList.remove('open'));
+});
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize İlçe dropdown
+    const ilceler = Object.keys(antalyaData).sort();
+    buildCustomSelect('ilce-trigger', 'ilce-dropdown', 'ilce-display', 'ilce', ilceler, 'İlçe Seçiniz...', (selectedIlce) => {
+        // When ilce selected, populate mahalle dropdown
+        const mahalleler = antalyaData[selectedIlce] || [];
+        const mahalleTrigger = document.getElementById('mahalle-trigger');
+        const mahalleDisplay = document.getElementById('mahalle-display');
+        const mahalleHidden = document.getElementById('mahalle');
+        // Reset mahalle
+        mahalleHidden.value = '';
+        mahalleDisplay.textContent = 'Mahalle / Köy Seçiniz...';
+        mahalleDisplay.style.color = 'var(--text-muted)';
+        buildCustomSelect('mahalle-trigger', 'mahalle-dropdown', 'mahalle-display', 'mahalle', mahalleler.sort(), 'Mahalle Seçiniz...', null);
+    });
+
+    // Set initial placeholder color
+    document.getElementById('ilce-display').style.color = 'var(--text-muted)';
+    document.getElementById('mahalle-display').style.color = 'var(--text-muted)';
+
+
     const form = document.getElementById('imar-form');
     const calculateBtn = document.getElementById('btn-calculate');
     const analysisContent = document.getElementById('analysis-content');
@@ -93,11 +185,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const date = new Date().toLocaleDateString('tr-TR');
+
+        // Location data
+        const ilce = document.getElementById('ilce')?.value || '';
+        const mahalle = document.getElementById('mahalle')?.value || '';
+        const adaNo = document.getElementById('ada-no')?.value || '';
+        const parselNo = document.getElementById('parsel-no')?.value || '';
+        const locationLine = [ilce ? `${ilce} İlçesi` : '', mahalle, adaNo ? `Ada: ${adaNo}` : '', parselNo ? `Parsel: ${parselNo}` : ''].filter(Boolean).join(' / ');
+        
         
         let html = `
             <div class="analysis-content-inner active">
                 <div class="report-header">
                     <span class="report-date">Profesyonel İmar Analizi - ${date}</span>
+                    ${locationLine ? `<span class="report-location"><i class="fas fa-map-marker-alt"></i> ${locationLine}</span>` : ''}
                 </div>
 
                 ${warningText}
@@ -157,7 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Add styling for internal report elements if needed
         const styles = `
-            .report-date { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 10px; border-bottom: 2px solid var(--accent); width: fit-content; padding-bottom: 4px; }
+            .report-date { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; border-bottom: 2px solid var(--accent); width: fit-content; padding-bottom: 4px; }
+            .report-location { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 12px; margin-top: 4px; }
+            .report-location i { font-size: 11px; }
             .alert { padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: flex; gap: 10px; align-items: center; }
             .alert-info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
             .alert-warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }

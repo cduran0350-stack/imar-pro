@@ -63,6 +63,61 @@
                         <h2>Veri Girişi</h2>
                     </div>
                     <form id="imar-form" class="grid-form">
+
+                        <!-- Konum Bilgileri Başlığı -->
+                        <div class="form-section-divider full-width">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Konum Bilgileri</span>
+                        </div>
+
+                        <!-- İlçe -->
+                        <div class="form-group">
+                            <label>İlçe</label>
+                            <div class="custom-select-wrapper" id="ilce-wrapper">
+                                <div class="custom-select-trigger" id="ilce-trigger" tabindex="0">
+                                    <span id="ilce-display">İlçe Seçiniz...</span>
+                                    <i class="fas fa-chevron-down caret-icon"></i>
+                                </div>
+                                <div class="custom-select-dropdown" id="ilce-dropdown"></div>
+                            </div>
+                            <input type="hidden" id="ilce">
+                        </div>
+
+                        <!-- Mahalle / Köy -->
+                        <div class="form-group">
+                            <label>Mahalle / Köy</label>
+                            <div class="custom-select-wrapper" id="mahalle-wrapper">
+                                <div class="custom-select-trigger" id="mahalle-trigger" tabindex="0">
+                                    <span id="mahalle-display">Önce ilçe seçiniz...</span>
+                                    <i class="fas fa-chevron-down caret-icon"></i>
+                                </div>
+                                <div class="custom-select-dropdown" id="mahalle-dropdown"></div>
+                            </div>
+                            <input type="hidden" id="mahalle">
+                        </div>
+
+                        <!-- Ada -->
+                        <div class="form-group">
+                            <label for="ada-no">Ada No</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="ada-no" placeholder="Örn: 120">
+                            </div>
+                        </div>
+
+                        <!-- Parsel -->
+                        <div class="form-group">
+                            <label for="parsel-no">Parsel No</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="parsel-no" placeholder="Örn: 5">
+                            </div>
+                        </div>
+
+                        <!-- İmar Bilgileri Başlığı -->
+                        <div class="form-section-divider full-width">
+                            <i class="fas fa-ruler-combined"></i>
+                            <span>İmar Bilgileri</span>
+                        </div>
+
                         <div class="form-group">
                             <label for="parsel-alani">Parsel Alanı (m²)</label>
                             <div class="input-wrapper">
