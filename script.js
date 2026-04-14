@@ -262,11 +262,13 @@ document.addEventListener('DOMContentLoaded', () => {
             .report-date { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; border-bottom: 2px solid var(--accent); width: fit-content; padding-bottom: 4px; }
             .report-location { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 12px; margin-top: 4px; }
             .report-location i { font-size: 11px; }
-            .alert { padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: flex; gap: 10px; align-items: center; }
+            .report-section { page-break-inside: avoid; break-inside: avoid; }
+            .report-summary-box { page-break-inside: avoid; break-inside: avoid; }
+            .alert { padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: flex; gap: 10px; align-items: center; page-break-inside: avoid; break-inside: avoid; }
             .alert-info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
             .alert-warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
             .report-notes { margin-top: 15px; padding: 10px; border-top: 1px solid var(--border); font-style: italic; font-size: 14px; color: var(--text-muted); }
-            .legal-disclaimer { margin-top: 25px; border-top: 1px solid var(--border); padding-top: 10px; opacity: 0.6; }
+            .legal-disclaimer { margin-top: 25px; border-top: 1px solid var(--border); padding-top: 10px; opacity: 0.6; page-break-inside: avoid; break-inside: avoid; }
         `;
         
         if (!document.getElementById('report-styles')) {
@@ -335,7 +337,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 filename:     `ImarPRO_Analiz_Raporu_${dateStr}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: 'css', avoid: ['.report-section', '.report-summary-box', '.alert', '.legal-disclaimer'] }
             };
 
             // Create temporary title for PDF
