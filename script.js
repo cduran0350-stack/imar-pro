@@ -230,17 +230,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
+            // Create temporary title for PDF
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'pdf-header-inject';
+            titleDiv.style.marginBottom = '24px';
+            titleDiv.style.paddingBottom = '16px';
+            titleDiv.style.borderBottom = '1px solid #e2e8f0';
+            titleDiv.innerHTML = `
+                <h1 style="font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 600; color: #1e293b; margin: 0 0 4px 0;">Profesyonel İmar Analizi</h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #64748b; margin: 0;">Parsel verilerini girerek otomatik hesaplama yapın.</p>
+            `;
+            
+            element.insertBefore(titleDiv, element.firstChild);
+
             // Generate PDF
-            // Adding a small loading state to the button
             const originalText = btnDownloadPdf.innerHTML;
             btnDownloadPdf.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Hazırlanıyor...';
             btnDownloadPdf.disabled = true;
 
             html2pdf().set(opt).from(element).save().then(() => {
+                element.removeChild(titleDiv); // Cleanup title
                 btnDownloadPdf.innerHTML = originalText;
                 btnDownloadPdf.disabled = false;
             }).catch(err => {
                 console.error("PDF oluşurken hata:", err);
+                if (element.contains(titleDiv)) element.removeChild(titleDiv);
                 btnDownloadPdf.innerHTML = originalText;
                 btnDownloadPdf.disabled = false;
                 alert("PDF oluşturulurken bir hata meydana geldi.");
