@@ -435,6 +435,96 @@ textarea {
 .highlight-green { color: var(--accent); }
 .highlight-blue { color: var(--primary); }
 
+/* Saved Reports Grid */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.report-history-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.report-history-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--primary);
+}
+
+.rh-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.rh-date {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.rh-badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.rh-body h4 {
+    font-size: 18px;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.rh-body p {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.rh-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 13px;
+    flex: 1;
+    border-radius: 6px;
+}
+
+.btn-danger {
+    background: #fee2e2;
+    color: #ef4444;
+    border: 1px solid transparent;
+}
+
+.btn-danger:hover {
+    background: #fecaca;
+}
+
+.btn-view {
+    background: #e0e7ff;
+    color: var(--primary);
+    border: 1px solid transparent;
+}
+
+.btn-view:hover {
+    background: #c7d2fe;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }

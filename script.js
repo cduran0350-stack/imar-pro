@@ -206,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         localStorage.setItem('imar_pro_reports', JSON.stringify(reports));
         alert('Rapor başarıyla tarayıcı hafızasına kaydedildi.');
+        switchView('reports');
     });
 
     // PDF Download functionality
@@ -246,4 +247,104 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // View Management & Saved Reports
+    const navCalc = document.getElementById('nav-calculator');
+    const navReports = document.getElementById('nav-reports');
+    const viewCalc = document.getElementById('view-calculator');
+    const viewReports = document.getElementById('view-reports');
+    const pageTitle = document.getElementById('page-title');
+    const pageSubtitle = document.getElementById('page-subtitle');
+    const headerActions = document.getElementById('header-actions-main');
+
+    function switchView(view) {
+        if (view === 'calculator') {
+            navCalc.classList.add('active');
+            navReports.classList.remove('active');
+            viewCalc.style.display = 'grid';
+            viewReports.style.display = 'none';
+            pageTitle.innerText = 'Profesyonel İmar Analizi';
+            pageSubtitle.innerText = 'Parsel verilerini girerek otomatik hesaplama yapın.';
+            headerActions.style.display = 'flex';
+        } else if (view === 'reports') {
+            navReports.classList.add('active');
+            navCalc.classList.remove('active');
+            viewReports.style.display = 'grid';
+            viewCalc.style.display = 'none';
+            pageTitle.innerText = 'Kayıtlı Raporlar';
+            pageSubtitle.innerText = 'Geçmiş analizlerinizi görüntüleyin ve yazdırın.';
+            headerActions.style.display = 'none';
+            loadReports();
+        }
+    }
+
+    navCalc.addEventListener('click', (e) => { e.preventDefault(); switchView('calculator'); });
+    navReports.addEventListener('click', (e) => { e.preventDefault(); switchView('reports'); });
+
+    function loadReports() {
+        const reports = JSON.parse(localStorage.getItem('imar_pro_reports') || '[]');
+        if (reports.length === 0) {
+            viewReports.innerHTML = `
+                <div class="empty-state" style="grid-column: 1/-1;">
+                    <i class="fas fa-folder-open"></i>
+                    <p>Henüz kaydedilmiş bir analiz raporu bulunmuyor.</p>
+                </div>
+            `;
+            return;
+        }
+
+        viewReports.innerHTML = '';
+        
+        reports.forEach((report, index) => {
+            const d = new Date(report.date);
+            const formattedDate = d.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' });
+
+            const card = document.createElement('div');
+            card.className = 'report-history-card';
+            card.innerHTML = `
+                <div class="rh-header">
+                    <span class="rh-badge"><i class="fas fa-check-circle"></i> Tamamlandı</span>
+                    <span class="rh-date">${formattedDate}</span>
+                </div>
+                <div class="rh-body">
+                    <h4>İmar Analiz Raporu</h4>
+                    <p>Parsel Büyüklüğü: <strong>${report.parsel} m²</strong></p>
+                </div>
+                <div class="rh-actions">
+                    <button class="btn btn-sm btn-view" data-idx="${index}">
+                        <i class="fas fa-eye"></i> Görüntüle
+                    </button>
+                    <button class="btn btn-sm btn-danger" data-idx="${index}">
+                        <i class="fas fa-trash"></i> Sil
+                    </button>
+                </div>
+            `;
+            viewReports.insertBefore(card, viewReports.firstChild);
+        });
+
+        document.querySelectorAll('.btn-view').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = e.currentTarget.getAttribute('data-idx');
+                const allReports = JSON.parse(localStorage.getItem('imar_pro_reports') || '[]');
+                analysisContent.innerHTML = allReports[idx].content;
+                document.getElementById('parsel-alani').value = allReports[idx].parsel || '';
+                
+                switchView('calculator');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        document.querySelectorAll('.btn-danger').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if(confirm('Kayıtlı raporu silmek istediğinize emin misiniz?')) {
+                    const idx = e.currentTarget.getAttribute('data-idx');
+                    const allReports = JSON.parse(localStorage.getItem('imar_pro_reports') || '[]');
+                    allReports.splice(idx, 1);
+                    localStorage.setItem('imar_pro_reports', JSON.stringify(allReports));
+                    loadReports();
+                }
+            });
+        });
+    }
+
 });

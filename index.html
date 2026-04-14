@@ -43,10 +43,10 @@
         <main class="main-content">
             <header class="top-header">
                 <div class="header-info">
-                    <h1>Profesyonel İmar Analizi</h1>
-                    <p>Parsel verilerini girerek otomatik hesaplama yapın.</p>
+                    <h1 id="page-title">Profesyonel İmar Analizi</h1>
+                    <p id="page-subtitle">Parsel verilerini girerek otomatik hesaplama yapın.</p>
                 </div>
-                <div class="header-actions">
+                <div class="header-actions" id="header-actions-main">
                     <button class="btn btn-secondary" onclick="window.print()">
                         <i class="fas fa-print"></i> Yazdır
                     </button>
@@ -59,7 +59,7 @@
                 </div>
             </header>
 
-            <div class="content-grid">
+            <div id="view-calculator" class="content-grid">
                 <!-- Input Section -->
                 <section class="card input-card">
                     <div class="card-header">
@@ -140,6 +140,11 @@
                         </div>
                     </div>
                 </section>
+            </div>
+
+            <!-- Saved Reports View -->
+            <div id="view-reports" class="reports-grid" style="display: none;">
+                <!-- Populated dynamically via JS -->
             </div>
         </main>
     </div>
