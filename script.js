@@ -114,6 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const hedefDaire = 100; // Standart ideal daire planlaması baz alınır
         const ekBilgiler = document.getElementById('ek-bilgiler').value;
 
+        // Project Metadata
+        const projeAdi = document.getElementById('proje-adi').value || 'İsimsiz Proje';
+        const hazirlayan = document.getElementById('hazirlayan').value;
+        const isveren = document.getElementById('isveren').value;
+
         // Validations
         if (!parselAlani || parselAlani <= 0) {
             alert('Lütfen geçerli bir parsel alanı giriniz.');
@@ -134,10 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resToplamAlan) animateValue(resToplamAlan, 0, toplamInsaatAlani, 1000);
 
         // Generate Detailed Report
-        generateReport(parselAlani, taks, kaks, katAdedi, tabanAlani, toplamInsaatAlani, katAlani, ekBilgiler, hedefDaire);
+        generateReport(parselAlani, taks, kaks, katAdedi, tabanAlani, toplamInsaatAlani, katAlani, ekBilgiler, hedefDaire, projeAdi, hazirlayan, isveren);
     }
 
-    function generateReport(parsel, taks, kaks, kat, ta, tia, ka, notes, hedefDaire) {
+    function generateReport(parsel, taks, kaks, kat, ta, tia, ka, notes, hedefDaire, projeAdi, hazirlayan, isveren) {
         // Business Logic for units
         let katPlanlamasiHTML = '';
         let toplamDaireSayisi = 0;
@@ -196,11 +201,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         
         let html = `
-            <div class="analysis-content-inner active">
+            <div class="analysis-content-inner active" data-project="${projeAdi}">
                 <div class="report-header">
-                    <span class="report-date">Profesyonel İmar Analizi - ${date}</span>
-                    ${locationLine ? `<span class="report-location"><i class="fas fa-map-marker-alt"></i> ${locationLine}</span>` : ''}
+                    <div class="project-info-block">
+                        <h2 class="project-title-main">${projeAdi}</h2>
+                        <div class="project-meta-grid">
+                            ${hazirlayan ? `<div class="p-meta-item"><strong>Hazırlayan:</strong> ${hazirlayan}</div>` : ''}
+                            ${isveren ? `<div class="p-meta-item"><strong>İşveren:</strong> ${isveren}</div>` : ''}
+                            <div class="p-meta-item"><strong>Tarih:</strong> ${date}</div>
+                        </div>
+                    </div>
+                    ${locationLine ? `<div class="report-location"><i class="fas fa-map-marker-alt"></i> ${locationLine}</div>` : ''}
                 </div>
+
 
                 ${warningText}
 
@@ -259,9 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Add styling for internal report elements if needed
         const styles = `
-            .report-date { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; border-bottom: 2px solid var(--accent); width: fit-content; padding-bottom: 4px; }
-            .report-location { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 12px; margin-top: 4px; }
-            .report-location i { font-size: 11px; }
+            .project-info-block { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--accent); }
+            .project-title-main { font-family: 'Outfit', sans-serif; color: var(--text-main); font-size: 22px; margin-bottom: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+            .project-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; font-size: 13px; color: var(--text-muted); }
+            .p-meta-item strong { color: var(--text-main); font-weight: 600; }
+            .report-location { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--primary); margin-bottom: 20px; }
+            .report-location i { font-size: 13px; }
             .report-section { page-break-inside: avoid; break-inside: avoid; }
             .report-summary-box { page-break-inside: avoid; break-inside: avoid; }
             .alert { padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: flex; gap: 10px; align-items: center; page-break-inside: avoid; break-inside: avoid; }
@@ -308,10 +324,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         const reports = JSON.parse(localStorage.getItem('imar_pro_reports') || '[]');
+        const currentProject = analysisContent.querySelector('.analysis-content-inner')?.getAttribute('data-project') || 'İsimsiz Proje';
+        
         reports.push({
             date: new Date().toISOString(),
             content: analysisContent.innerHTML,
-            parsel: document.getElementById('parsel-alani').value
+            parsel: document.getElementById('parsel-alani').value,
+            projeAdi: currentProject
         });
         localStorage.setItem('imar_pro_reports', JSON.stringify(reports));
         alert('Rapor başarıyla tarayıcı hafızasına kaydedildi.');
@@ -432,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="rh-date">${formattedDate}</span>
                 </div>
                 <div class="rh-body">
-                    <h4>İmar Analiz Raporu</h4>
+                    <h4 class="rh-project-title">${report.projeAdi || 'İmar Analiz Raporu'}</h4>
                     <p>Parsel Büyüklüğü: <strong>${report.parsel} m²</strong></p>
                 </div>
                 <div class="rh-actions">
