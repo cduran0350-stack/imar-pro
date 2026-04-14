@@ -312,7 +312,9 @@ document.addEventListener('DOMContentLoaded', () => {
         reports.push({
             date: new Date().toISOString(),
             content: analysisContent.innerHTML,
-            parsel: document.getElementById('parsel-alani').value
+            parsel: document.getElementById('parsel-alani').value,
+            adaNo: document.getElementById('ada-no').value || '-',
+            parselNo: document.getElementById('parsel-no').value || '-'
         });
         localStorage.setItem('imar_pro_reports', JSON.stringify(reports));
         alert('Rapor başarıyla tarayıcı hafızasına kaydedildi.');
@@ -427,6 +429,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const card = document.createElement('div');
             card.className = 'report-history-card';
+            
+            // Generate display string for Ada/Parsel
+            let locationInfo = `Ada: ${report.adaNo || '-'} / Parsel: ${report.parselNo || '-'}`;
+            if (!report.adaNo && !report.parselNo) {
+                locationInfo = `Parsel Büyüklüğü: ${report.parsel} m²`;
+            }
+
             card.innerHTML = `
                 <div class="rh-header">
                     <span class="rh-badge"><i class="fas fa-check-circle"></i> Tamamlandı</span>
@@ -434,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="rh-body">
                     <h4>İmar Analiz Raporu</h4>
-                    <p>Parsel Büyüklüğü: <strong>${report.parsel} m²</strong></p>
+                    <p><strong>${locationInfo}</strong></p>
                 </div>
                 <div class="rh-actions">
                     <button class="btn btn-sm btn-view" data-idx="${index}">
@@ -454,6 +463,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const allReports = JSON.parse(localStorage.getItem('imar_pro_reports') || '[]');
                 analysisContent.innerHTML = allReports[idx].content;
                 document.getElementById('parsel-alani').value = allReports[idx].parsel || '';
+                document.getElementById('ada-no').value = allReports[idx].adaNo || '';
+                document.getElementById('parsel-no').value = allReports[idx].parselNo || '';
                 
                 switchView('calculator');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
