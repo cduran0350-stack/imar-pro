@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const taks = parseFloat(document.getElementById('taks').value) || 0;
         const kaks = parseFloat(document.getElementById('kaks').value) || 0;
         const katAdedi = parseInt(document.getElementById('kat-adedi').value) || 0;
+        const hedefDaire = parseFloat(document.getElementById('daire-alani').value) || 100;
         const ekBilgiler = document.getElementById('ek-bilgiler').value;
 
         // Validations
@@ -37,13 +38,42 @@ document.addEventListener('DOMContentLoaded', () => {
         animateValue(resToplamAlan, 0, toplamInsaatAlani, 1000);
 
         // Generate Detailed Report
-        generateReport(parselAlani, taks, kaks, katAdedi, tabanAlani, toplamInsaatAlani, katAlani, ekBilgiler);
+        generateReport(parselAlani, taks, kaks, katAdedi, tabanAlani, toplamInsaatAlani, katAlani, ekBilgiler, hedefDaire);
     }
 
-    function generateReport(parsel, taks, kaks, kat, ta, tia, ka, notes) {
+    function generateReport(parsel, taks, kaks, kat, ta, tia, ka, notes, hedefDaire) {
         // Business Logic for units
-        const ortalamaDaire = 120; // m2
-        const tahminiDaireSayisi = Math.floor((tia * 0.85) / ortalamaDaire); // %15 common area deduction
+        let katPlanlamasiHTML = '';
+        let toplamDaireSayisi = 0;
+        let netKatAlani = ka * 0.80; // %20 ortak alan kesintisi
+        let katOrtakAlan = ka * 0.20;
+        
+        if (kat > 0 && tia > 0) {
+            let katBasiDaire = Math.max(1, Math.round(netKatAlani / hedefDaire));
+            let gercekDairem2 = netKatAlani / katBasiDaire;
+            toplamDaireSayisi = katBasiDaire * kat;
+
+            katPlanlamasiHTML = `
+                <div class="report-section" style="margin-top: 24px;">
+                    <h3><i class="fas fa-list-ol"></i> Planlanan Kat Dağılım Listesi</h3>
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <i class="fas fa-info-circle"></i>
+                        Kat başına <strong>%20 ortak alan</strong> payı (${formatNumber(katOrtakAlan)} m²) çıkarılarak net dairesel alan hesaplanmıştır.
+                    </div>
+            `;
+            
+            for(let i = 1; i <= kat; i++) {
+                katPlanlamasiHTML += `
+                    <div class="report-item">
+                        <span>${i}. Kat:</span>
+                        <span><strong class="highlight-blue">${katBasiDaire} daire</strong> ${formatNumber(gercekDairem2)}m²</span>
+                    </div>
+                `;
+            }
+            katPlanlamasiHTML += `</div>`;
+        } else if (tia > 0) {
+            toplamDaireSayisi = Math.floor((tia * 0.80) / hedefDaire);
+        }
         
         // Check for common architectural constraints
         let warningText = '';
@@ -86,14 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="report-section">
-                    <h3><i class="fas fa-home"></i> Kullanım ve Verimlilik Analizi</h3>
+                    <h3><i class="fas fa-home"></i> Genel Verimlilik Analizi</h3>
                     <div class="report-item">
-                        <span>Daire Başına Tahmini Alan:</span>
-                        <span>120 m² (Brüt)</span>
+                        <span>Tahmini Toplam Bağımsız Bölüm:</span>
+                        <span class="highlight-green">${toplamDaireSayisi} Adet</span>
                     </div>
                     <div class="report-item">
-                        <span>Tahmini Bağımsız Bölüm Sayısı:</span>
-                        <span class="highlight-green">${tahminiDaireSayisi} Adet</span>
+                        <span>Toplam Bina Ortak Alanı (%20):</span>
+                        <span>${formatNumber(tia * 0.20)} m²</span>
                     </div>
                     <div class="report-item">
                         <span>Bahçe / Açık Alan Payı:</span>
@@ -101,13 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
 
+                ${katPlanlamasiHTML}
+
                 <div class="report-summary-box">
                     <h3>Profesyonel Değerlendirme</h3>
                     <p>
                         ${parsel} m² büyüklüğündeki parsel üzerinde, ${taks} TAKS ve ${kaks} KAKS değerleri baz alındığında, 
                         toplamda <strong>${formatNumber(tia)} m²</strong> inşaat hakkı bulunmaktadır. 
                         ${kat > 0 ? `Yapı ${kat} katlı olarak tasarlandığında kat başına yaklaşık <strong>${formatNumber(ka)} m²</strong> inşaat alanı düşmektedir.` : ''}
-                        Piyasa standartlarına göre bu parsel üzerinde ortalama <strong>${tahminiDaireSayisi} adet</strong> konut/ofis birimi üretilmesi mümkündür.
+                        Piyasa standartlarına göre bu parsel üzerinde hedeflediğiniz kullanım alanlarına uygun olarak toplam <strong>${toplamDaireSayisi} adet</strong> konut/ofis birimi üretilmesi mümkündür.
                     </p>
                     ${notes ? `<div class="report-notes"><strong>Ek Notlar:</strong> ${notes}</div>` : ''}
                 </div>
