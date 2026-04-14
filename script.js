@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const taks = parseFloat(document.getElementById('taks').value) || 0;
         const kaks = parseFloat(document.getElementById('kaks').value) || 0;
         const katAdedi = parseInt(document.getElementById('kat-adedi').value) || 0;
-        const hedefDaire = parseFloat(document.getElementById('daire-alani').value) || 100;
+        const hedefDaire = 100; // Standart ideal daire planlaması baz alınır
         const ekBilgiler = document.getElementById('ek-bilgiler').value;
 
         // Validations
