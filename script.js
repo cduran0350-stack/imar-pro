@@ -207,4 +207,43 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('imar_pro_reports', JSON.stringify(reports));
         alert('Rapor başarıyla tarayıcı hafızasına kaydedildi.');
     });
+
+    // PDF Download functionality
+    const btnDownloadPdf = document.getElementById('btn-download-pdf');
+    if (btnDownloadPdf) {
+        btnDownloadPdf.addEventListener('click', () => {
+            const content = analysisContent.innerHTML;
+            if (content.includes('empty-state')) {
+                alert('PDF indirmek için önce bir hesaplama yapmalısınız.');
+                return;
+            }
+
+            const element = document.getElementById('analysis-content');
+            const dateStr = new Date().toLocaleDateString('tr-TR').replace(/\./g, '-');
+            
+            const opt = {
+                margin:       10,
+                filename:     `ImarPRO_Analiz_Raporu_${dateStr}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Generate PDF
+            // Adding a small loading state to the button
+            const originalText = btnDownloadPdf.innerHTML;
+            btnDownloadPdf.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Hazırlanıyor...';
+            btnDownloadPdf.disabled = true;
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btnDownloadPdf.innerHTML = originalText;
+                btnDownloadPdf.disabled = false;
+            }).catch(err => {
+                console.error("PDF oluşurken hata:", err);
+                btnDownloadPdf.innerHTML = originalText;
+                btnDownloadPdf.disabled = false;
+                alert("PDF oluşturulurken bir hata meydana geldi.");
+            });
+        });
+    }
 });
